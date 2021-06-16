@@ -4,6 +4,7 @@ const user = require('../models/user');
 const bcryptjs = require('bcryptjs');
 const passport = require('passport');
 require('./passportLocal')(passport);
+require('./googleAuth')(passport);
 
 function checkAuth(req, res, next){
     if(req.isAuthenticated()){
@@ -73,7 +74,12 @@ router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         res.redirect('/')
     })
-})
+});
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email',] }));
+
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    res.render('profile', { username: req.user.username })
+});
 router.get('/profile', checkAuth, (req, res) => {
     res.render('profile', { username: req.user.username })
 });
