@@ -1,2 +1,2 @@
-module.exports.clientId = "";
-module.exports.clientSecret = "";
+module.exports.clientId = "<CLIENTID>";
+module.exports.clientSecret = "<CLIENTSECRET>";
