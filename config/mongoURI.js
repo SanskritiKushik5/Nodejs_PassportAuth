@@ -1,1 +1,1 @@
-module.exports = "<Enter MongoDB Url"
+module.exports = "<MONGODB URI>";

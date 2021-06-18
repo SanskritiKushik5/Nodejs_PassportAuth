@@ -11,7 +11,8 @@ function checkAuth(req, res, next){
         res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
         next();
     }else{
-        res.redirect('/')
+        req.flash('error_message', "Please login to continue!");
+        res.redirect('/login');
     }
 }
 router.get('/', (req, res) => {
@@ -65,7 +66,7 @@ router.post('/signup', (req, res) => {
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
         failureRedirect: '/login',
-        successRedirect: '/',
+        successRedirect: '/profile',
         failureFlash: true,
     })(req, res, next);
 });
@@ -81,7 +82,7 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
     res.render('profile', { username: req.user.username })
 });
 router.get('/profile', checkAuth, (req, res) => {
-    res.render('profile', { username: req.user.username })
+    res.render('profile', { username: req.user.username, verified: req.user.isVerified })
 });
-
-module.exports = router
+router.use(require('./userRoutes'));
+module.exports = router;
